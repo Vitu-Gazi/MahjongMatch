@@ -15,6 +15,8 @@ public class MainMenu : MonoBehaviour
         currentLevel = new PrefsValue<int>("currentLevel", 0);
         eternalMode = new PrefsValue<bool>("eternalMode", false);
 
+        eternalMode.Value = false;
+
         if (level != -1)
         {
             currentLevel.Value = level;
