@@ -11,19 +11,24 @@ public class GameController : Singleton<GameController>
     [SerializeField] private bool randomLevel;
     [SerializeField] private List<GameObject> levels = new List<GameObject>();
 
+    private GameObject level;
+
     private PrefsValue<int> currentLevel;
+    private PrefsValue<bool> eternalMode;
 
 
     private void Start()
     {
-        if (randomLevel)
+        eternalMode = new PrefsValue<bool>("eternalMode", false);
+
+        if (eternalMode.Value)
         {
             Instantiate(levels.GetRandom());
             return;
         }
 
         currentLevel = new PrefsValue<int>("currentLevel", 0);
-        Instantiate(levels[currentLevel.Value]);
+        level = Instantiate(levels[currentLevel.Value]);
     }
 
 
@@ -31,12 +36,21 @@ public class GameController : Singleton<GameController>
     {
         if (value)
         {
-            if (currentLevel.Value < levels.Count - 1)
+            if (!eternalMode.Value && currentLevel.Value < levels.Count - 1)
             {
                 currentLevel.Value += 1;
             }
 
-            winPanel.SetActive(true);
+            if (!eternalMode.Value)
+            {
+                winPanel.SetActive(true);
+            }
+            else
+            {
+                Destroy(level);
+
+                level = Instantiate(levels.GetRandom());
+            }
         }
         else
         {
