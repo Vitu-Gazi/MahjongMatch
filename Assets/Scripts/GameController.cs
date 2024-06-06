@@ -38,6 +38,9 @@ public class GameController : Singleton<GameController>
         {
             if (!eternalMode.Value && currentLevel.Value < levels.Count - 1)
             {
+                PrefsValue<string> cell = new PrefsValue<string>("cellState" + currentLevel.Value, CellState.LOCK.ToString());
+                cell.Value = CellState.COMPLEATE.ToString();
+
                 currentLevel.Value += 1;
             }
 
